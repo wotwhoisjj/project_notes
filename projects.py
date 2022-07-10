@@ -1,5 +1,7 @@
 import os
 import datetime
+import sys
+
 from mdutils.mdutils import MdUtils
 from mdutils import Html
 
@@ -11,48 +13,65 @@ def banner():
 
 
 def general_info():
+    info_list = []
     client_name = input("[*] Client Name: ")
     project_link = input("[*] Project's Sharepoint Link: ")
     project_name = input("[*] Project Name: ")
-    testing_date = input("[*] Testing Window (YYYY_MM_DD): ")
+    testing_date = input("[*] Testing Window (YYYY-MM-DD): ")
     test_box = input("[*] Black/Grey Box: ").upper()
     environment = input("[*] UAT/Production: ").upper()
-    return client_name, project_link, project_name, testing_date, test_box, environment
+    filename = f"{testing_date}-{project_name}.md"
+    fullfile = f"C:\\Users\\USER\\Desktop\\projecttest\\{filename}"
+    file = open(f"{fullfile}", "w")
+    file.write('hi')
+    info_list.append(client_name)
+    info_list.append(project_link)
+    info_list.append(project_name)
+    info_list.append(testing_date)
+    info_list.append(test_box)
+    info_list.append(environment)
+    return info_list
 
 
 def web_app():
     urls = []
     credentials = []
     roles = []
+    web_list = []
 
     # Provide either URL or IP
-    print("[*] Enter 'end' once no more URLs to enter")
+    print("[*] Press Enter once no more URLs to enter")
     url = input("[*] Target URL: ")
-    while url.lower() != 'end':
+    while url.lower() != '':
         urls.append(url)
         url = input("[*] Target URL: ")
 
     # Provide user roles if applicable
     available_role = input("[*] Any Available Roles (y/n): ")
     if available_role.lower() == 'y':
-        print("[*] Enter 'end' once no more roles to enter")
+        print("[*] Press Enter once no more roles to enter")
         role = input("[*] Roles Available: ")
-        while role.lower() != 'end':
+        while role.lower() != '':
             roles.append(role)
             role = input("[*] Roles Available: ")
 
     # Provide credentials if applicable
     available_cred = input("[*] Any Available Credentials (y/n): ")
     if available_cred.lower() == 'y':
-        print("[*] Enter 'end' once no more credentials to enter")
+        print("[*] Press Enter once no more credentials to enter")
         credential = input("[*] Credentials (user/pass): ")
-        while credential.lower() != 'end':
+        while credential.lower() != '':
             credentials.append(credential)
             credential = input("[*] Credentials (user/pass): ")
     pages = input("[*] How many static/dynamic pages: ")
     parameters = input("[*] How many parameters: ")
+    web_list.append(urls)
+    web_list.append(roles)
+    web_list.append(credentials)
+    web_list.append(pages)
+    web_list.append(parameters)
     print("[*] Check with client for a proper user matrix if applicable")
-    return urls, roles, credentials, pages, parameters
+    return web_list
 
 
 def api():
@@ -60,18 +79,19 @@ def api():
     roles = []
     http_methods = []
     num_endpoints = int(input("[*] Total number of API Endpoints: "))
+    api_list = []
 
     # Provide the API endpoints
-    print("[*] Enter 'end' once no more APIs to enter ")
+    print("[*] Press Enter once no more APIs to enter ")
     endpoint = input("[*] API Endpoint: ")
-    while endpoint.lower() != 'end':
+    while endpoint.lower() != '':
         endpoints.append(endpoint)
         endpoint = input("[*] API Endpoint: ")
 
     # Provide the HTTP methods available
-    print("[*] Enter 'end' once no more methods to enter")
+    print("[*] Press Enter once no more methods to enter")
     http_method = input("[*] Available HTTP Methods (PUT/DELETE/POST/GET): ").upper()
-    while http_method != 'end':
+    while http_method != '':
         http_methods.append(http_method)
         http_method = input("[*] Available HTTP Methods (PUT/DELETE/POST/GET): ").upper()
 
@@ -83,12 +103,17 @@ def api():
     # Provide user roles if applicable
     role = input("[*] Available Roles (y/n): ")
     if role.lower() == 'y':
-        print("[*] Enter 'end' once no more roles to enter")
+        print("[*] Press Enter once no more roles to enter")
         role = input("[*] Available Roles: ")
-        while role.lower() != 'end':
+        while role.lower() != '':
             roles.append(role)
             role = input("[*] Available Roles: ")
-    return endpoints, num_endpoints, http_methods, postman_swagger, roles
+    api_list.append(endpoints)
+    api_list.append(num_endpoints)
+    api_list.append(http_methods)
+    api_list.append(postman_swagger)
+    api_list.append(roles)
+    return api_list
 
 
 def network():
@@ -98,17 +123,17 @@ def network():
     while interface not in {'internal', 'external', 'both'}:
         print("[*] Invalid choice, try again")
         interface = input("[*] Interfaces in-scope (internal/external/both): ")
-    print("[*] Enter 'end' once no more IP addresses to enter")
+    print("[*] Press Enter once no more IP addresses to enter")
     if interface.lower() == 'internal':
-        internal_ip = input("[*] Internal IP address: ")
-        while internal_ip != 'end':
+        internal_ip = input("[*] Internal IP address/range/subnet: ")
+        while internal_ip != '':
             internal_ips.append(internal_ip)
-            internal_ip = input("[*] Internal IP address: ")
+            internal_ip = input("[*] Internal IP address/range/subnet: ")
     elif interface.lower() == 'external':
-        external_ip = input("[*] External IP address: ")
-        while external_ip != 'end':
+        external_ip = input("[*] External IP address/range/subnet: ")
+        while external_ip != '':
             external_ips.append(external_ip)
-            external_ip = input("[*] Internal IP address: ")
+            external_ip = input("[*] External IP address/range/subnet: ")
     return internal_ips, external_ips
 
 
@@ -131,11 +156,12 @@ def mobile():
 
 def special_note():
     notes = []
-    print("[*] Enter 'end' once no more notes")
+    print("[*] Press Enter once no more notes")
     note = input("[*] Any Special Notes: ")
-    while note != 'end':
+    while note != '':
         notes.append(note)
         note = input("[*] Any Special Notes: ")
+    return notes
 
 '''
 file_name = client_name + "_" + project_name
@@ -153,10 +179,6 @@ def create_md():
     mdfile.write(testing_date + '\n')
     mdfile.new_header(level=4, title='URLs/Endpoints')
 '''
-
-
-# def create_file():
-
 
 def main():
     testing_type = input("[*] Security Assessment Type (Mobile/Web/API/Network/Multiple): ")
@@ -177,5 +199,9 @@ def main():
 
 if __name__ == '__main__':
     banner()
-    general_info()
-    main()
+    try:
+        general_info()
+        main()
+    except KeyboardInterrupt:
+        print("[*] Exiting Program")
+        sys.exit()
